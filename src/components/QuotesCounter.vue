@@ -14,7 +14,8 @@ export default {
   name: "QuotesCounter",
 
   props: {
-    quoteLen: Number
+    quoteLen: Number,
+    maxLen: Number
   },
 
   computed: {
@@ -24,7 +25,7 @@ export default {
 
     quoteBarFull() {
       return {
-        "quote-bar-full": this.quoteLen == 10
+        "quote-bar-full": this.quoteLen == this.maxLen
       };
     }
   }

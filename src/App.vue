@@ -1,7 +1,16 @@
 <template>
-  <div id="app">
-    
-    <component :is="'quotes-counter'" :quoteLen="quoteLen"></component>
+  <div id="app" class="container">
+    <component :is="'quotes-grid-header'" :quoteLen="quoteLen" :maxLen="maxLen"></component>
+
+    <component :is="'quotes-grid-new'" :quoteLen="quoteLen" @add-quote="addQuote"></component>
+
+    <component :is="'quotes-grid'" :quotes="quotes" @rmv-quote="rmvQuote"></component>
+
+    <component :is="'quotes-info'">{{ info[0] }}</component>
+
+    <hr />
+
+    <component :is="'quotes-counter'" :quoteLen="quoteLen" :maxLen="maxLen"></component>
 
     <component :is="'quotes-new'" :quoteLen="quoteLen" @add-quote="addQuote"></component>
 
@@ -18,7 +27,7 @@
       </component>
     </div>
 
-    <component :is="'quotes-info'"></component>
+    <component :is="'quotes-info'">{{ info[1] }}</component>
   </div>
 </template>
 
@@ -27,17 +36,24 @@ import QuotesCounter from "./components/QuotesCounter.vue";
 import QuotesNew from "./components/QuotesNew.vue";
 import QuotesInfo from "./components/QuotesInfo.vue";
 import QuotesCard from "./components/QuotesCard.vue";
+import QuotesGridHeader from "./components/QuotesGridHeader.vue";
+import QuotesGrid from "./components/QuotesGrid.vue";
+import QuotesGridNew from "./components/QuotesGridNew.vue";
 
 export default {
   components: {
     "quotes-counter": QuotesCounter,
     "quotes-new": QuotesNew,
     "quotes-info": QuotesInfo,
-    "quotes-card": QuotesCard
+    "quotes-card": QuotesCard,
+    "quotes-grid": QuotesGrid,
+    "quotes-grid-new": QuotesGridNew,
+    "quotes-grid-header": QuotesGridHeader
   },
 
   data() {
     return {
+      maxLen: 10,
       quotes: [
         "They can't take that away from me",
         "Vivo sonhando mil horas sem fim",
@@ -45,6 +61,10 @@ export default {
         "Heart to heart, lips to lips, we're chained and bound together",
         "In everyway you're mine",
         "The way you move your hair"
+      ],
+      info: [
+        "Info: You can delete the quotes by clicking on them.",
+        "Info: You can either copy the quote or delete it by clicking on the right top buttons."
       ]
     };
   },
@@ -57,7 +77,11 @@ export default {
 
   methods: {
     addQuote(newQuote) {
-      this.quotes.push(newQuote);
+      if (this.quoteLen < this.maxLen) {
+        this.quotes.push(newQuote);
+      } else {
+        alert("You've added 10 quotes already");
+      }
     },
 
     rmvQuote(index) {
@@ -69,8 +93,6 @@ export default {
 
 <style scoped>
 #app {
-  width: 80%;
-  margin: 0 auto;
   font-family: Arial, Helvetica, sans-serif;
 }
 
